@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D1 Form App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: #f9fafb;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #10b981;
+        }
+        
+        .btn-secondary:hover {
+            background: #059669;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .records-section {
+            border-top: 2px solid #f3f4f6;
+            padding-top: 30px;
+        }
+        
+        .section-title {
+            color: #1f2937;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .record {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .record-id {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        
+        .record-field {
+            margin-bottom: 8px;
+        }
+        
+        .record-field strong {
+            color: #1f2937;
+            margin-right: 8px;
+        }
+        
+        .message {
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 10px;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border-left-color: #10b981;
+        }
+        
+        .error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border-left-color: #ef4444;
+        }
+        
+        .loading {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+            border-left-color: #3b82f6;
+        }
+        
+        .stats {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #64748b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☁️ Cloudflare D1 Form</h1>
+            <p>Local development with cloud database</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2 class="section-title">
+                    📝 Submit New Record
+                </h2>
+                
+                <form id="dataForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Enter your message here..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn" id="submitBtn">Submit to D1</button>
+                </form>
+                
+                <div id="messageDiv"></div>
+            </div>
+            
+            <div class="records-section">
+                <h2 class="section-title">
+                    💾 Database Records
+                </h2>
+                
+                <button id="loadRecords" class="btn btn-secondary">🔄 Refresh Records</button>
+                
+                <div class="stats" id="statsDiv"></div>
+                <div id="recordsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let isLoading = false;
+        
+        // DOM Elements
+        const form = document.getElementById('dataForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('messageDiv');
+        const loadBtn = document.getElementById('loadRecords');
+        const recordsList = document.getElementById('recordsList');
+        const statsDiv = document.getElementById('statsDiv');
+        
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+            
+            try {
+                setLoading(true);
+                showMessage('Submitting to Cloudflare D1...', 'loading');
+                
+                const response = await fetch(`${API_URL}/api/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(`✅ Success! Record ID: ${result.id} saved to D1`, 'success');
+                    form.reset();
+                    loadRecords();
+                } else {
+                    showMessage(`❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`🔌 Network Error: ${error.message}`, 'error');
+            } finally {
+                setLoading(false);
+            }
+        });
+        
+        // Load records
+        loadBtn.addEventListener('click', loadRecords);
+        
+        async function loadRecords() {
+            try {
+                setLoading(true);
+                statsDiv.innerHTML = '⏳ Loading from D1...';
+                
+                const response = await fetch(`${API_URL}/api/records`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayRecords(result.data);
+                    statsDiv.innerHTML = `📊 Total Records: ${result.count} | Database: D1`;
+                } else {
+                    showMessage(`❌ Failed to load: ${result.error}`, 'error');
+                    statsDiv.innerHTML = '❌ Load failed';
+                }
+            } catch (error) {
+                showMessage(`🔌 Network Error: ${error.message}`, 'error');
+                statsDiv.innerHTML = '🔌 Connection failed';
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        function displayRecords(records) {
+            if (records.length === 0) {
+                recordsList.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h3>No records yet</h3>
+                        <p>Submit the form above to create your first record!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            recordsList.innerHTML = records.map((record, index) => `
+                <div class="record">
+                    <div class="record-header">
+                        <span>Record #${records.length - index}</span>
+                        <span class="record-id">ID: ${record.id}</span>
+                    </div>
+                    <div class="record-field">
+                        <strong>👤 Name:</strong> ${record.name}
+                    </div>
+                    <div class="record-field">
+                        <strong>📧 Email:</strong> ${record.email}
+                    </div>
+                    <div class="record-field">
+                        <strong>💭 Message:</strong> ${record.message}
+                    </div>
+                    <div class="record-field">
+                        <strong>📅 Created:</strong> ${new Date(record.created_at).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showMessage(text, type) {
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                if (type !== 'loading') messageDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        function setLoading(loading) {
+            isLoading = loading;
+            submitBtn.disabled = loading;
+            loadBtn.disabled = loading;
+            
+            if (loading) {
+                submitBtn.textContent = '⏳ Submitting...';
+                loadBtn.textContent = '⏳ Loading...';
+            } else {
+                submitBtn.textContent = 'Submit to D1';
+                loadBtn.textContent = '🔄 Refresh Records';
+            }
+        }
+        
+        // Load records on page load
+        window.addEventListener('load', loadRecords);
+        
+        // Health check
+        fetch(`${API_URL}/api/health`)
+            .then(r => r.json())
+            .then(data => console.log('🎯 Server Status:', data))
+            .catch(err => console.error('❌ Server Check Failed:', err));
+    </script>
+</body>
+</html>
